@@ -18,8 +18,9 @@ public class ExecutorConbtroller {
 
 	@GetMapping(value = "/executebash")
 	public String getExecutorResp(@RequestHeader HttpHeaders headers,@RequestParam("bashname") String bashName,@RequestParam("bashparams") String bashParameters) {
-		bashName = ".\\scripts\\"+bashName;
-		ProcessBuilder builder = new ProcessBuilder("sh "+bashName+" "+bashParameters);
+		bashName = "scripts\\"+bashName;
+		String command = "sh "+bashName+" "+bashParameters;
+		ProcessBuilder builder = new ProcessBuilder(command.trim());
 		builder.redirectErrorStream(true);
 		Process p = null;
 		try {
