@@ -8,18 +8,22 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.minidev.json.JSONObject;
+
 @CrossOrigin("*")
 @RestController
-public class ExecutorConbtroller {
+public class ExecutorController {
 
-	@GetMapping(value = "/executebash")
-	public String getExecutorResp(@RequestHeader HttpHeaders headers,@RequestParam("bashname") String bashName,@RequestParam("bashparams") String bashParameters) {
-		bashName = "scripts\\"+bashName;
-		String command = "sh "+bashName+" "+bashParameters;
+	@PostMapping(value = "/executebash")
+	public String getExecutorResp(@RequestHeader HttpHeaders headers,@RequestBody JSONObject jsonObject) {
+		
+		String bashName = "scripts/"+jsonObject.getAsString("bashname");
+		String command = "sh "+bashName+" "+jsonObject.getAsString("bashparams")==null?"":jsonObject.getAsString("bashparams");
 		ProcessBuilder builder = new ProcessBuilder(command.trim());
 		builder.redirectErrorStream(true);
 		Process p = null;
