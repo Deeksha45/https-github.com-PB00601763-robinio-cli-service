@@ -32,16 +32,17 @@ public class ExecutorController {
 			p = Runtime.getRuntime().exec(command.trim());
 
 			BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			StringBuilder line = null;
+			StringBuilder lineBuilder = new StringBuilder();
+			String line = "";
 			while (true) {
-				line = line.append(r.readLine());
+				line = r.readLine();
 				if (line == null) {
 					break;
 				}
-				
+				lineBuilder.append(line);
 			}
-			System.out.println(line);
-			return line.toString();
+			
+			return lineBuilder.toString();
 		} catch (IOException | JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
