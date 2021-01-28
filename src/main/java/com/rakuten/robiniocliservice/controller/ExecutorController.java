@@ -26,8 +26,9 @@ public class ExecutorController {
 			JSONObject jsonObject = new JSONObject(requestStr);
 			System.out.println("jsonObject:::"+jsonObject);
 			String bashName = "scripts/" + jsonObject.getString("bashname");
-			String command = "sh " + bashName + " " + jsonObject.getString("bashparams") == null ? ""
+			String bashParams = jsonObject.getString("bashparams") == null ? ""
 					: jsonObject.getString("bashparams");
+			String command = "sh " + bashName + " " + bashParams;
 			ProcessBuilder builder = new ProcessBuilder(command.trim());
 			builder.redirectErrorStream(true);
 			Process p = null;
