@@ -9,11 +9,9 @@ import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin("*")
@@ -24,16 +22,14 @@ public class ExecutorController {
 	public String getExecutorResp(@RequestHeader HttpHeaders headers, @RequestBody String requestStr) {
 		try {
 			JSONObject jsonObject = new JSONObject(requestStr);
-			System.out.println("jsonObject:::"+jsonObject);
-			String bashName = "scripts/" + jsonObject.getString("bashname");
-			String bashParams = jsonObject.getString("bashparams") == null ? ""
-					: jsonObject.getString("bashparams");
-			String command = "sh " + bashName + " " + bashParams;
-			ProcessBuilder builder = new ProcessBuilder(command.trim());
-			builder.redirectErrorStream(true);
+			System.out.println("jsonObject:::" + jsonObject);
+			String commandName = jsonObject.getString("commandname");
+			String bashName = jsonObject.getString("bashname");
+			String bashParams = jsonObject.getString("bashparams");
+			String command = commandName + " " + bashName + " " + bashParams;
 			Process p = null;
 
-			p = builder.start();
+			p = Runtime.getRuntime().exec(command.trim());
 
 			BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String line = null;
